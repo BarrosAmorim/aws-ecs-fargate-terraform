@@ -27,3 +27,9 @@ variable "availability_zones" {
   type        = list(string)
   default     = ["us-east-1a", "us-east-1b"]
 }
+
+variable "app_port" {
+  description = "Porta TCP exposta pela aplicacao conteinerizada"
+  type        = number
+  default     = 3000
+}
