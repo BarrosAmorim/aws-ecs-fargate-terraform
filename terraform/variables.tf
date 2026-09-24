@@ -33,3 +33,9 @@ variable "app_port" {
   type        = number
   default     = 3000
 }
+
+variable "health_check_path" {
+  description = "Caminho da rota para o health check do Load Balancer"
+  type        = string
+  default     = "/"
+}
