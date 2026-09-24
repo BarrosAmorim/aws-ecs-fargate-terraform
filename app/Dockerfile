@@ -29,7 +29,7 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PATH="/install/bin:${PATH}" \
-    PYTHONPATH="/install/lib/python3.12/site-packages:${PYTHONPATH}"
+    PYTHONPATH="/install/lib/python3.12/site-packages"
 
 # Cria um grupo e um usuário comum sem privilégios administrativos (UID 10001)
 RUN groupadd -g 10001 appgroup && \
