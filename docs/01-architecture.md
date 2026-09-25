@@ -2,6 +2,7 @@
 
 > **Status do Projeto:** 🟡 Em desenvolvimento — Fase 1: Especificação e Implementação da API Local
 
+
 ---
 
 ## 1. O que a aplicação vai fazer
