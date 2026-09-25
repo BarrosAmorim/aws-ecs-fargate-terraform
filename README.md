@@ -1,12 +1,12 @@
 # AWS ECS Fargate Infrastructure with Terraform
 
-Infraestrutura como Código (IaC) modular e resiliente provisionada na AWS utilizando Terraform. O projeto implementa uma API conteinerizada em Python rodando em **Amazon ECS Fargate** distribuído em alta disponibilidade, isolado em subnets privadas e acessível externamente via **Application Load Balancer (ALB)**.
+Infraestrutura como Código (IaC) e resiliente provisionada na AWS utilizando Terraform. O projeto implementa uma API conteinerizada em Python rodando em **Amazon ECS Fargate** distribuído em arquitetura multi-AZ com workloads distribuídos entre duas AZs, isolado em subnets privadas e acessível externamente via **Application Load Balancer (ALB)**.
 
 ---
 
 ## 📌 Visão Geral da Arquitetura
 
-A arquitetura foi desenhada seguindo as melhores práticas do *AWS Well-Architected Framework*, com foco em isolamento de rede, alta disponibilidade e controle de tráfego:
+A arquitetura foi desenhada seguindo as melhores práticas do *AWS Well-Architected Framework*, com foco em isolamento de rede, arquitetura multi-AZ com workloads distribuídos entre duas AZs e controle de tráfego:
 
 * **VPC Customizada:** Segmentada em subnets públicas e privadas distribuídas estrategicamente em duas Zonas de Disponibilidade (`us-east-1a` e `us-east-1b`) para garantir tolerância a falhas.
 * **Segurança e Isolamento Privado:** As tarefas do ECS Fargate executam exclusivamente nas subnets privadas, sem endereços IPv4 públicos atribuídos diretamente às interfaces de rede elásticas (ENIs).
@@ -32,7 +32,7 @@ A arquitetura foi desenhada seguindo as melhores práticas do *AWS Well-Architec
 
 ## 📸 Validação da Infraestrutura e Evidências
 
-### 1. Balanceamento de Carga e Alta Disponibilidade (Round-Robin)
+### 1. Balanceamento de Carga e arquitetura multi-AZ com workloads distribuídos entre duas AZs (Round-Robin)
 O Application Load Balancer distribui as requisições de forma balanceada entre os containers ativos nas diferentes zonas de disponibilidade:
 
 ![Teste de Resposta do ALB](docs/images/alb-response-test.png)
@@ -62,7 +62,7 @@ O processo completo de construção, configuração, validação e desprovisiona
 5. **[Segurança e IAM](docs/05-security.md)** — Definição de Security Groups em camadas e permissões mínimas.
 6. **[Application Load Balancer](docs/06-alb.md)** — Configuração do ALB, Target Groups e Health Checks.
 7. **[Isolamento via NAT Gateway](docs/07-implementacao-nat-gateway.md)** — Roteamento seguro de saída para as tarefas privadas.
-8. **[Validação e Testes](docs/08-validacao-teste.md)** — Testes práticos de Round-Robin e alta disponibilidade.
+8. **[Validação e Testes](docs/08-validacao-teste.md)** — Testes práticos de Round-Robin e arquitetura multi-AZ com workloads distribuídos entre duas AZs.
 9. **[Desprovisionamento e Auditoria](docs/09-desprovisionamento-e-auditoria.md)** — Desmontagem automatizado e auditoria anti-cobrança.
 
 ## 📂 Estrutura do Repositório
