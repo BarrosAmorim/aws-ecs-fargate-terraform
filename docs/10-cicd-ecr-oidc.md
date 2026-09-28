@@ -45,7 +45,7 @@ resource "aws_iam_role" "github_actions_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:BarrosAmorim/aws-ecs-fargate-terraform:*"
+            "token.actions.githubusercontent.com:sub" = "repo:BarrosAmorim@24548784/aws-ecs-fargate-terraform:*"
           }
         }
       }

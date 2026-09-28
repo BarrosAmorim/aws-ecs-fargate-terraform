@@ -26,11 +26,12 @@ resource "aws_iam_role" "github_actions_role" {
           }
           StringLike = {
             # Bloqueio estrito para o seu repositório
-            "token.actions.githubusercontent.com:sub" = "repo:BarrosAmorim/aws-ecs-fargate-terraform:*"
+            "token.actions.githubusercontent.com:sub" = "repo:BarrosAmorim@24548784/aws-ecs-fargate-terraform:*"
           }
         }
       }
     ]
   })
 }
+
 
