@@ -105,6 +105,9 @@ resource "aws_ecs_service" "main" {
   desired_count   = var.app_count
   launch_type     = "FARGATE"
 
+  # Dá 120 segundos para o container subir antes de testar a saúde
+  health_check_grace_period_seconds = 120
+
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
     subnets          = aws_subnet.private[*].id
