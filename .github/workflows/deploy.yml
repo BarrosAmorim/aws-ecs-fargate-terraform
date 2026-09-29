@@ -27,7 +27,7 @@ env:
   ECR_REPOSITORY: fargate-api-dev
   ECS_CLUSTER: fargate-api-dev-cluster
   ECS_SERVICE: fargate-api-dev-service
-  CONTAINER_NAME: app
+  CONTAINER_NAME: fargate-api-dev-app
 
 jobs:
   build-and-deploy:
