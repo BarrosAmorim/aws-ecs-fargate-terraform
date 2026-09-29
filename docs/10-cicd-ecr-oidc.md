@@ -17,7 +17,7 @@ Criei o arquivo terraform/oidc.tf com o seguinte conteúdo:
 # 1. Provedor OIDC para o GitHub Actions
 # ==============================================================================
 resource "aws_iam_openid_connect_provider" "github_actions" {
-  url             = "[https://token.actions.githubusercontent.com](https://token.actions.githubusercontent.com)"
+  url             = "https://token.actions.githubusercontent.com"
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [
     "6938fd4d98bab03faadb97b34396831e3780aea1",
@@ -45,7 +45,10 @@ resource "aws_iam_role" "github_actions_role" {
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
           StringLike = {
-            "token.actions.githubusercontent.com:sub" = "repo:BarrosAmorim@24548784/aws-ecs-fargate-terraform:*"
+            "token.actions.githubusercontent.com:sub" = [
+              "repo:BarrosAmorim@24548784/aws-ecs-fargate-terraform@*:*",
+              "repo:BarrosAmorim/aws-ecs-fargate-terraform:*"
+            ]
           }
         }
       }
@@ -54,7 +57,7 @@ resource "aws_iam_role" "github_actions_role" {
 }
 
 # ==============================================================================
-# 3. Permissões mínimas para a esteira (ECR e ECS)
+# 3. Permissões da esteira (ECR e ECS)
 # ==============================================================================
 resource "aws_iam_policy" "github_actions_policy" {
   name        = "github-actions-ecs-cicd-policy"
@@ -108,6 +111,9 @@ resource "aws_iam_policy" "github_actions_policy" {
   })
 }
 
+# ==============================================================================
+# 4. Anexo da Policy na Role
+# ==============================================================================
 resource "aws_iam_role_policy_attachment" "github_actions_attach" {
   role       = aws_iam_role.github_actions_role.name
   policy_arn = aws_iam_policy.github_actions_policy.arn
