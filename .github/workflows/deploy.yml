@@ -5,9 +5,17 @@ on:
     branches:
       - main
       - feature/cicd-pipeline
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'terraform/**'
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - 'terraform/**'
 
 permissions:
   id-token: write   # Obrigatório para autenticação via OIDC
