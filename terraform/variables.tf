@@ -37,7 +37,7 @@ variable "app_port" {
 variable "health_check_path" {
   description = "Caminho da rota para o health check do Load Balancer"
   type        = string
-  default     = "/"
+  default     = "/health"
 }
 
 variable "app_image" {
