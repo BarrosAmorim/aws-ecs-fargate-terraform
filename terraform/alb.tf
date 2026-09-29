@@ -25,7 +25,7 @@ resource "aws_lb_target_group" "app" {
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
 
-  # Reduz a espera de drenagem das tarefas antigas de 300s para 30s
+  # Reduz a espera de desligamento dos contentores antigos durante o rolling update
   deregistration_delay = 30
 
   health_check {
