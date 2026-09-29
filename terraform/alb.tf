@@ -38,6 +38,7 @@ resource "aws_lb_target_group" "app" {
     unhealthy_threshold = 3
   }
 
+
   tags = {
     Name = "fargate-api-${var.environment}-tg"
   }

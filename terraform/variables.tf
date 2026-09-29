@@ -31,7 +31,7 @@ variable "availability_zones" {
 variable "app_port" {
   description = "Porta TCP exposta pela aplicacao conteinerizada"
   type        = number
-  default     = 80
+  default     = 8000
 }
 
 variable "health_check_path" {

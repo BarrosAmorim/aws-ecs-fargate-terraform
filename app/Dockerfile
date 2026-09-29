@@ -45,7 +45,7 @@ COPY --chown=appuser:appgroup main.py .
 USER 10001:10001
 
 # Documenta a porta que a aplicação escuta internamente
-EXPOSE 80
+EXPOSE 8000
 
 # Executa o servidor ASGI Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80", "--workers", "2"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]
