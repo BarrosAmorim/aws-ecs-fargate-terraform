@@ -33,17 +33,20 @@ on:
       - 'terraform/**'
 
 permissions:
-  id-token: write   # Obrigatório para autenticação via OIDC
-  contents: read    # Permite ler o código do repositório
+  id-token: write
+  contents: read
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}
   ROLE_TO_ASSUME: ${{ vars.AWS_ROLE_TO_ASSUME }}
   ECR_REPOSITORY: fargate-api-dev
+  ECS_CLUSTER: fargate-api-dev-cluster
+  ECS_SERVICE: fargate-api-dev-service
+  CONTAINER_NAME: fargate-api-dev-app
 
 jobs:
-  build-and-push:
-    name: Build & Push Docker Image
+  build-and-deploy:
+    name: Build, Push & Deploy to ECS
     runs-on: ubuntu-latest
 
     steps:
@@ -62,16 +65,36 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, Tag e Push da Imagem Docker
+        id: build-image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
-          # Build da imagem a partir da pasta app/
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest ./app
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-          # Envio das tags para o ECR
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      - name: Baixar Task Definition Atual do ECS
+        run: |
+          aws ecs describe-task-definition \
+            --task-definition fargate-api-dev-task \
+            --query taskDefinition > task-definition.json
+
+      - name: Renderizar Nova Imagem na Task Definition
+        id: render-web-container
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
+
+      - name: Deploy da Task Definition no ECS Fargate
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-web-container.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
 ```
 
 ---
